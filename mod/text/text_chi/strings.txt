@@ -1,0 +1,6 @@
+LizardOnBack|蜥蜴背负
+LizardOnBack Core Settings|蜥蜴背负核心设置
+Long Press To Drop Lizard|长按放下蜥蜴
+Enable Long Press To Drop Lizard From Back|启用长按拾取键放下背上的蜥蜴
+Throw Lizard|扔出蜥蜴
+Enable Throwing Lizard From Back|启用扔出背上的蜥蜴

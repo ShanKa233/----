@@ -100,3 +100,4 @@ C:\Users\Shan_\source\repos\背蜥蝓生\bin\Debug\net48\LizardOnBack.dll
 C:\Users\Shan_\source\repos\背蜥蝓生\bin\Debug\net48\LizardOnBack.pdb
 C:\Users\Shan_\source\repos\背蜥蝓生\obj\Debug\net48\LizardOnBack.dll
 C:\Users\Shan_\source\repos\背蜥蝓生\obj\Debug\net48\LizardOnBack.pdb
+C:\Users\Shan_\source\repos\背蜥蝓生\obj\Debug\net48\lizardOnBack.sourcelink.json

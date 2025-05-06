@@ -282,7 +282,8 @@ namespace LizardOnBackMod
 
         public static bool LikesPlayer(Lizard liz, Player player)
         {
-            return liz.AI.LikeOfPlayer(liz.AI.tracker.RepresentationForCreature(player.abstractCreature, addIfMissing: false)) > 0.5f;
+            return liz?.AI != null && liz.AI.tracker != null &&
+                   liz.AI.LikeOfPlayer(liz.AI.tracker.RepresentationForCreature(player?.abstractCreature, addIfMissing: false)) > 0.5f;
         }
         public static bool PlayerOnIsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabcheck)
         {
@@ -430,21 +431,7 @@ namespace LizardOnBackMod
                     }
                 }
             }
-
-            // var lizardIndex = -1;
-            // for (int i = 0; i < 2; i++)
-            // {
-            //     if (self.grasps[i]?.grabbed is Lizard)
-            //     {
-            //         lizardIndex = i;
-            //     }
-            // }
-            // if (self.input[0].pckp && ((lizardIndex > -1 && lizardData.CanPutLizardToBack) || lizardData.CanRetrieveLizardFromBack))
-            // {
-            //     lizardData.increment = true;
-            // }
-
-
+            //执行正常的拾取update
             orig(self, eu);
 
             if (self.wantToPickUp <= 0)
@@ -621,9 +608,12 @@ namespace LizardOnBackMod
                 if (increment)
                 {
                     counter++;
-
+                    //不是矛大师而且开了长按放下功能才能长按放下背上的蛞蝓猫
+                    bool canPutLizardWithLongPress =
+                    LizardOnBackMod.LizardOnBack.options.EnableLongPressToDropLizard.Value
+                    && owner.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear;
                     // 有蜥蜴时，长按20帧将蜥蜴拿下来
-                    if (lizard != null && counter > 20)
+                    if (lizard != null && counter > 20 && canPutLizardWithLongPress)
                     {
                         LizardToHand(eu);
                         counter = 0;
@@ -874,7 +864,7 @@ namespace LizardOnBackMod
             }
             public void ThrowLizard(bool eu)
             {
-                if (lizard != null)
+                if (lizard != null && LizardOnBackMod.LizardOnBack.options.EnableThrowLizard.Value)
                 {
                     var lizard = this.lizard;
                     LizardToHand(eu);
