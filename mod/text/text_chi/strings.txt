@@ -6,3 +6,5 @@ Throw Lizard|扔出蜥蜴
 Enable Throwing Lizard From Back|启用扔出背上的蜥蜴
 Carry Lizard|背蜥蜴
 Button for carrying and dropping lizard, long press to use|用于背负和卸下蜥蜴的按钮,长按使用
+Allow Carrying Spear/Slugcat While Carrying Lizard|允许同时背负长矛/蛞蝓猫和蜥蜴
+Carry Spear And Lizard|同时背负长矛和蜥蜴

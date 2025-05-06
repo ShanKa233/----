@@ -23,13 +23,10 @@ namespace LizardOnBackMod
     {
         public const string modID = "ShanKa.LizardOnBack";
         public const string modeName = "LizardOnBack";
-        public const string version = "0.0.5";
+        public const string version = "0.0.6";
         public static LizardOnBack instance;
         public static LizardOnBackOptions options;
         private bool init;
-        private bool fullyInit;
-        private bool addedMod = false;
-        private bool is_post_mod_init_initialized = false;
 
         // private bool enabledImprovedInput = false;
 
@@ -50,7 +47,6 @@ namespace LizardOnBackMod
 
             try
             {
-                fullyInit = true;
                 // 添加配置选项到机器连接器
                 MachineConnector.SetRegisteredOI(modID, options);
 
@@ -61,7 +57,6 @@ namespace LizardOnBackMod
             catch (Exception e)
             {
                 Logger.LogError(e);
-                fullyInit = false;
             }
         }
     }
@@ -71,6 +66,7 @@ namespace LizardOnBackMod
         // 配置选项
         public readonly Configurable<bool> EnableLongPressToDropLizard;
         public readonly Configurable<bool> EnableThrowLizard;
+        public readonly Configurable<bool> AllowCarryingSpearAndLizard;
 
         private UIelement[] LizardOnBackSettings;
 
@@ -79,6 +75,7 @@ namespace LizardOnBackMod
             // 初始化配置选项
             EnableLongPressToDropLizard = config.Bind("EnableLongPressToDropLizard", true);
             EnableThrowLizard = config.Bind("EnableThrowLizard", true);
+            AllowCarryingSpearAndLizard = config.Bind("AllowCarryingSpearAndLizard", false);
         }
 
         public override void Initialize()
@@ -89,6 +86,8 @@ namespace LizardOnBackMod
                 OpTab lizardOnBackTab = new OpTab(this, "LizardOnBack");
                 Tabs = new OpTab[1] { lizardOnBackTab };
 
+                float y = 550f;
+                float interval = 30f;
                 // 创建UI元素
                 LizardOnBackSettings = new UIelement[]
                 {
@@ -96,14 +95,19 @@ namespace LizardOnBackMod
                     new OpLabel(10f, 550f, Translate("LizardOnBack"), bigText: true),
                     
                     // 长按放下设置
-                    new OpLabel(10f, 510f, Translate("Long Press To Drop Lizard"), bigText: false),
-                    new OpCheckBox(EnableLongPressToDropLizard, new Vector2(10f, 480f)),
-                    new OpLabel(40f, 480f, Translate("Enable Long Press To Drop Lizard From Back"), bigText: false),
+                    new OpLabel(10f, y-interval, Translate("Long Press To Drop Lizard"), bigText: false),
+                    new OpCheckBox(EnableLongPressToDropLizard, new Vector2(10f, y-interval*2)),
+                    new OpLabel(40f, y-interval*2, Translate("Enable Long Press To Drop Lizard From Back"), bigText: false),
                     
                     // 扔出蜥蜴设置
-                    new OpLabel(10f, 450f, Translate("Throw Lizard"), bigText: false),
-                    new OpCheckBox(EnableThrowLizard, new Vector2(10f, 420f)),
-                    new OpLabel(40f, 420f, Translate("Enable Throwing Lizard From Back"), bigText: false)
+                    new OpLabel(10f, y-interval*4, Translate("Throw Lizard"), bigText: false),
+                    new OpCheckBox(EnableThrowLizard, new Vector2(10f, y-interval*5)),
+                    new OpLabel(40f, y-interval*5, Translate("Enable Throwing Lizard From Back"), bigText: false),
+                    
+                    // 同时背负设置
+                    new OpLabel(10f, y-interval*7, Translate("Carry Spear And Lizard"), bigText: false),
+                    new OpCheckBox(AllowCarryingSpearAndLizard, new Vector2(10f, y-interval*8)),
+                    new OpLabel(40f, y-interval*8, Translate("Allow Carrying Spear/Slugcat While Carrying Lizard"), bigText: false)
                 };
 
                 // 将元素添加到选项卡

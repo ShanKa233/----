@@ -25,10 +25,7 @@ namespace LizardOnBackMod_RWInputMod_Compat
             if (player_number >= maximum_number_of_players) return;
 
             //用这个方法来覆盖正常的那次hook
-            if (lizardtoback_keybinding.Unbound(player_number))
-            {
-                LizardOnBackHook.LizardOnBack.GetLizardOnBackData(self).lizardToBackInput = Get_Input(self);
-            }
+            LizardOnBackHook.LizardOnBack.GetLizardOnBackData(self).lizardToBackInput = Get_Input(self);
         }
 
 
@@ -39,7 +36,7 @@ namespace LizardOnBackMod_RWInputMod_Compat
         {
             if (lizardtoback_keybinding != null) return;
 
-            lizardtoback_keybinding = PlayerKeybind.Register(LizardOnBackMod.LizardOnBack.modID+":lizardtoback", LizardOnBackMod.LizardOnBack.modeName
+            lizardtoback_keybinding = PlayerKeybind.Register(LizardOnBackMod.LizardOnBack.modID + ":lizardtoback", LizardOnBackMod.LizardOnBack.modeName
             , Custom.rainWorld.inGameTranslator.Translate("Carry Lizard"), KeyCode.None, KeyCode.None);
             lizardtoback_keybinding.HideConflict = other_keybinding => lizardtoback_keybinding.Can_Hide_Conflict_With(other_keybinding);
             lizardtoback_keybinding.Description = Custom.rainWorld.inGameTranslator.Translate("Button for carrying and dropping lizard, long press to use");

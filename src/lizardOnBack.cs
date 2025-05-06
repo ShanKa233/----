@@ -67,7 +67,7 @@ namespace LizardOnBackMod
         {
             // 检查玩家背上是否已有蜥蜴
             var lizardData = LizardOnBack.GetLizardOnBackData(self);
-            if (lizardData.HasALizard)
+            if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
             {
                 // 如果背上有蜥蜴，禁止放置蛞蝓
                 return false;
@@ -82,7 +82,7 @@ namespace LizardOnBackMod
         {
             // 检查玩家背上是否已有蜥蜴
             var lizardData = LizardOnBack.GetLizardOnBackData(self);
-            if (lizardData.HasALizard)
+            if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
             {
                 // 如果背上有蜥蜴，禁止放置长矛
                 return false;
@@ -519,13 +519,16 @@ namespace LizardOnBackMod
                     if (!interactionLocked && lizard == null)
                     {
                         bool flag = true;
-                        if (owner.spearOnBack != null)
+                        if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value)
                         {
-                            flag = flag && !owner.spearOnBack.HasASpear;
-                        }
-                        if (owner.slugOnBack != null)
-                        {
-                            flag = flag && !owner.slugOnBack.HasASlug;
+                            if (owner.spearOnBack != null)
+                            {
+                                flag = flag && !owner.spearOnBack.HasASpear;
+                            }
+                            if (owner.slugOnBack != null)
+                            {
+                                flag = flag && !owner.slugOnBack.HasASlug;
+                            }
                         }
                         return flag;
                     }
@@ -549,8 +552,8 @@ namespace LizardOnBackMod
 
                     for (int i = 0; i < owner.grasps.Length; i++)
                     {
-                        // 如果玩家手中抓着的物体是大型物体(比如长矛)或者是蜥蜴,则不能从背上取下蜥蜴
-                        if (owner.grasps[i] != null && (owner.Grabability(owner.grasps[i].grabbed) > Player.ObjectGrabability.BigOneHand || owner.grasps[i].grabbed is Player))
+                        // 如果玩家手中抓着东西，则不能从背上取下蜥蜴
+                        if (owner.grasps[i] != null)
                         {
                             return false;
                         }
@@ -587,13 +590,14 @@ namespace LizardOnBackMod
                     lizard.GoThroughFloors = true;
                     lizard.shortcutDelay = 10;
                     // 防止蜥蜴抓取其他蜥蜴
-                    // for (int i = 0; i < lizard.grasps?.Length; i++)
-                    // {
-                    //     if (lizard.grasps[i]?.grabbed is Player)
-                    //     {
-                    //         lizard.ReleaseGrasp(i);
-                    //     }
-                    // }
+
+                    for (int i = 0; i < lizard.grasps?.Length; i++)
+                    {
+                        if (lizard.grasps[i]?.grabbed is Player)
+                        {
+                            lizard.ReleaseGrasp(i);
+                        }
+                    }
                 }
 
                 // 处理increment标志，用于蜥蜴放到手上或背上的计时器

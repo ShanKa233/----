@@ -11,6 +11,7 @@ namespace LizardOnBackMod.ModCompat
         {
 
             LizardOnBackMod_RWInputMod_Compat.RWInputMod.Initialize();
+            // UnityEngine.Debug.Log("ModCompat_Helper.Initialize加载成功");
         }
 
 
