@@ -87,6 +87,9 @@
     <Reference Include="UnityEngine.UIElementsModule">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Rain World\RainWorld_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
+    <Reference Include="ImprovedInput">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\312520\2944727862\plugins\ImprovedInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

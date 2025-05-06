@@ -7,6 +7,7 @@ using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using MonoMod.RuntimeDetour;
 using System.Reflection;
+using LizardOnBack;
 
 namespace LizardOnBackMod
 {
@@ -49,9 +50,18 @@ namespace LizardOnBackMod
 
             On.Player.Stun += PlayerOnStun;//击晕放下蜥蜴
             On.Player.Die += PlayerOnDie;//死亡放下蜥蜴
+
+            On.Player.checkInput += PlayerOnCheckInput;
+        }
+
+        private static void PlayerOnCheckInput(On.Player.orig_checkInput orig, Player self)
+        {
+            orig(self);
+            LizardOnBack.GetLizardOnBackData(self).lizardToBackInput = self.input[0].pckp;
         }
 
         // 处理Player.CanPutSlugToBack属性的Hook前缀
+
 
         public static bool CanPutSlugOnBack_Prefix(Func<Player, bool> orig, Player self)
         {
@@ -177,8 +187,8 @@ namespace LizardOnBackMod
                             }
                         }
                     }
-                    // 有蜥蜴可以背
-                    if (player.input[0].pckp && (lizardGrasp > -1 || lizardData.CanRetrieveLizardFromBack))
+
+                    if (player.lizardToBackInput() && (lizardGrasp > -1 || lizardData.CanRetrieveLizardFromBack))
                     {
                         // UnityEngine.Debug.Log("因为第二次测验通过所以increment = true");
                         lizardData.increment = true;
@@ -404,29 +414,10 @@ namespace LizardOnBackMod
                         num10++;
                     }
                 }
-                if (num6 > -1 && self.noPickUpOnRelease < 1)
-                {
-                    if (!self.input[0].pckp)
-                    {
-                        int j;
-                        for (j = 1; j < 10 && self.input[j].pckp; j++)
-                        {
-                        }
-                        if (j > 1 && j < 10)
-                        {
-                            // self.PickupPressed();
-                        }
-                    }
-                }
-                else if (self.input[0].pckp && !self.input[1].pckp)
-                {
-                    // self.PickupPressed();
-                }
-                if (self.input[0].pckp)
+                if (self.lizardToBackInput())
                 {
                     if (lizardIndex > -1 || lizardData.CanRetrieveLizardFromBack)
                     {
-                        // UnityEngine.Debug.Log("因为第一次测验通过所以increment = true");
                         lizardData.increment = true;
                     }
                 }
@@ -510,6 +501,7 @@ namespace LizardOnBackMod
 
             public Lizard lizard;
 
+            public bool lizardToBackInput = false;
             public bool increment;
 
             public int counter;
@@ -593,7 +585,7 @@ namespace LizardOnBackMod
                 if (lizard != null)
                 {
                     lizard.GoThroughFloors = true;
-
+                    lizard.shortcutDelay = 10;
                     // 防止蜥蜴抓取其他蜥蜴
                     // for (int i = 0; i < lizard.grasps?.Length; i++)
                     // {

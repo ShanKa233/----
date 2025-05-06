@@ -9,6 +9,9 @@ using UnityEngine;
 using Menu.Remix.MixedUI;
 using Menu.Remix.MixedUI.ValueTypes;
 using Menu;
+using LizardOnBack;
+using System.Linq;
+using LizardOnBackMod.ModCompat;
 
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -20,13 +23,17 @@ namespace LizardOnBackMod
     {
         public const string modID = "ShanKa.LizardOnBack";
         public const string modeName = "LizardOnBack";
-        public const string version = "0.0.2";
+        public const string version = "0.0.5";
         public static LizardOnBack instance;
         public static LizardOnBackOptions options;
         private bool init;
         private bool fullyInit;
         private bool addedMod = false;
+        private bool is_post_mod_init_initialized = false;
 
+        // private bool enabledImprovedInput = false;
+
+        public static bool IsImprovedInputMod_Enabled => ModManager.ActiveMods.Any(x => x.id == "improved-input-config");
         public void OnEnable()
         {
             instance = this;
@@ -43,11 +50,13 @@ namespace LizardOnBackMod
 
             try
             {
+                fullyInit = true;
                 // 添加配置选项到机器连接器
                 MachineConnector.SetRegisteredOI(modID, options);
+
                 LizardOnBackHook.Hook();
 
-                fullyInit = true;
+                if (IsImprovedInputMod_Enabled) ModCompat_Helper.Initialize();
             }
             catch (Exception e)
             {
@@ -79,7 +88,7 @@ namespace LizardOnBackMod
                 // 创建配置选项卡
                 OpTab lizardOnBackTab = new OpTab(this, "LizardOnBack");
                 Tabs = new OpTab[1] { lizardOnBackTab };
-                
+
                 // 创建UI元素
                 LizardOnBackSettings = new UIelement[]
                 {
@@ -96,7 +105,7 @@ namespace LizardOnBackMod
                     new OpCheckBox(EnableThrowLizard, new Vector2(10f, 420f)),
                     new OpLabel(40f, 420f, Translate("Enable Throwing Lizard From Back"), bigText: false)
                 };
-                
+
                 // 将元素添加到选项卡
                 lizardOnBackTab.AddItems(LizardOnBackSettings);
             }
