@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LizardOnBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d86147da8a2441aa62ec2a234ee957224de67538")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d9b44f3792cb1691319a27e400d8be5628eca3d")]
 [assembly: System.Reflection.AssemblyProductAttribute("LizardOnBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LizardOnBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -880,7 +880,9 @@ namespace LizardOnBackMod
             {
                 lizard.CollideWithObjects = newOverlap;
                 lizard.canBeHitByWeapons = newOverlap;
-                // lizard.onBack = (newOverlap ? null : owner);
+
+                lizard.GetExLizardData().ownerPlayer = (newOverlap ? null : owner);
+
                 if (lizard.graphicsModule != null && owner.room != null)
                 {
                     for (int i = 0; i < owner.room.game.cameras.Length; i++)
