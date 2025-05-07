@@ -23,7 +23,7 @@ namespace LizardOnBackMod
     {
         public const string modID = "ShanKa.LizardOnBack";
         public const string modeName = "LizardOnBack";
-        public const string version = "0.0.7";
+        public const string version = "0.0.8";
         public static LizardOnBackPlugin instance;
         public static LizardOnBackOptions options;
         private bool init;
@@ -51,6 +51,7 @@ namespace LizardOnBackMod
                 MachineConnector.SetRegisteredOI(modID, options);
 
                 LizardOnBackHook.Hook();
+                LizardBehaviorsHook.Hook();
 
                 if (IsImprovedInputMod_Enabled) ModCompat_Helper.Initialize();
             }

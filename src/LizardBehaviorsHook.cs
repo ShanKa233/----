@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using MonoMod.Cil;
+using RWCustom;
 
 namespace LizardOnBackMod
 {
@@ -10,22 +11,33 @@ namespace LizardOnBackMod
         {
             On.LizardAI.DetermineBehavior += LizardAI_DetermineBehavior;//防止在背上的蜥蜴像回家
 
-            On.AbstractCreature.IsEnteringDen += PreventFriendDeathOnDenEnter;//防止拉着的时候进入巢穴被弄死
+            On.Creature.SuckedIntoShortCut += SuckedIntoShortCut;//如果是蜥蜴回家就松手
         }
 
-
-        public static void PreventFriendDeathOnDenEnter(On.AbstractCreature.orig_IsEnteringDen orig, AbstractCreature self, WorldCoordinate den)
+        private static void SuckedIntoShortCut(On.Creature.orig_SuckedIntoShortCut orig, Creature self, IntVector2 entrancePos, bool carriedByOther)
         {
-            Creature realizedCreature = self.realizedCreature;
-            Player player = realizedCreature as Player;
-            if (player == null || !player.grasps.Any((Creature.Grasp x) => x.grabbed is Lizard liz && LizardOnBackHook.LikesPlayer(liz, player)))
+            //如果蜥蜴回家就让他手上的玩家手松开
+            if (self.room.shortcutData(entrancePos).shortCutType == ShortcutData.Type.CreatureHole)
             {
-                orig.Invoke(self, den);
+                if (self is Lizard lizard)
+                {
+                    for (int i = lizard.grabbedBy.Count - 1; i >= 0; i--)
+                    {
+                        var grab = lizard.grabbedBy[i];
+                        if (grab?.grabber is Player player)
+                        {
+                            player.ReleaseGrasp(player.grasps.IndexOf(grab));
+                        }
+                    }
+                    if(lizard.GetExLizardData().ownerPlayer!=null)
+                    {
+                        LizardOnBackHook.LizardOnBack.GetLizardOnBackData(lizard.GetExLizardData().ownerPlayer).DropLizard();
+                    }
+                }
             }
+            orig.Invoke(self, entrancePos, carriedByOther);
         }
-
-
-        private static LizardAI.Behavior LizardAI_DetermineBehavior(On.LizardAI.orig_DetermineBehavior orig, LizardAI self)
+       private static LizardAI.Behavior LizardAI_DetermineBehavior(On.LizardAI.orig_DetermineBehavior orig, LizardAI self)
         {
             LizardAI.Behavior behavior = orig(self);
             if (self.lizard.GetExLizardData().ownerPlayer != null)
