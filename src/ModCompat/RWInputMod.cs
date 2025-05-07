@@ -36,7 +36,7 @@ namespace LizardOnBackMod_RWInputMod_Compat
         {
             if (lizardtoback_keybinding != null) return;
 
-            lizardtoback_keybinding = PlayerKeybind.Register(LizardOnBackMod.LizardOnBack.modID + ":lizardtoback", LizardOnBackMod.LizardOnBack.modeName
+            lizardtoback_keybinding = PlayerKeybind.Register(LizardOnBackMod.LizardOnBackPlugin.modID + ":lizardtoback", LizardOnBackMod.LizardOnBackPlugin.modeName
             , Custom.rainWorld.inGameTranslator.Translate("Carry Lizard"), KeyCode.None, KeyCode.None);
             lizardtoback_keybinding.HideConflict = other_keybinding => lizardtoback_keybinding.Can_Hide_Conflict_With(other_keybinding);
             lizardtoback_keybinding.Description = Custom.rainWorld.inGameTranslator.Translate("Button for carrying and dropping lizard, long press to use");

@@ -8,3 +8,8 @@ Carry Lizard|背蜥蜴
 Button for carrying and dropping lizard, long press to use|用于背负和卸下蜥蜴的按钮,长按使用
 Allow Carrying Spear/Slugcat While Carrying Lizard|允许同时背负长矛/蛞蝓猫和蜥蜴
 Carry Spear And Lizard|同时背负长矛和蜥蜴
+May drop when stunned, will drop when grabbed by creatures|被击晕时可能掉落，被生物抓住时会掉落
+Will drop after being carried by dangerous creatures for a while|被危险生物携带一段时间后会掉落
+Only drops when player dies|仅在玩家死亡时掉落
+Never drops, even when player dies|永不掉落，即使玩家死亡
+Lizard Grip Strength|蜥蜴抓抓力

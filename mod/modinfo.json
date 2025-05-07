@@ -1,7 +1,7 @@
 {
   "id": "ShanKa.LizardOnBack",
   "name": "Piggyback Lizard",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "authors": "ShanKa",
   "description": "Piggyback Lizard",
   "priorities": ["improved-input-config"]

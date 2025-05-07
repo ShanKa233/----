@@ -33,6 +33,12 @@ namespace LizardOnBackMod
                     BindingFlags.Static | BindingFlags.Public)
             );
 
+            LostLizardHooks.initHook();//处理被攻击等伤害时丢弃背上蜥蜴的行为
+
+            // On.Player.Update += PlayerOnUpdate;//移动到LostLizardHooks.cs
+            // On.Player.Stun += PlayerOnStun;//击晕放下蜥蜴
+            // On.Player.Die += PlayerOnDie;//死亡放下蜥蜴
+
             On.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;//视觉上的修改
 
             On.Player.GrabUpdate += Player_GrabUpdate;
@@ -48,11 +54,11 @@ namespace LizardOnBackMod
             On.Player.IsCreatureLegalToHoldWithoutStun += PlayerOnIsCreatureLegalToHoldWithoutStun;//拿手上不会晕
 
 
-            On.Player.Stun += PlayerOnStun;//击晕放下蜥蜴
-            On.Player.Die += PlayerOnDie;//死亡放下蜥蜴
 
-            On.Player.checkInput += PlayerOnCheckInput;
+            On.Player.checkInput += PlayerOnCheckInput;//用于兼容improved-input-config
         }
+
+
 
         private static void PlayerOnCheckInput(On.Player.orig_checkInput orig, Player self)
         {
@@ -67,7 +73,7 @@ namespace LizardOnBackMod
         {
             // 检查玩家背上是否已有蜥蜴
             var lizardData = LizardOnBack.GetLizardOnBackData(self);
-            if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
+            if (!LizardOnBackMod.LizardOnBackPlugin.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
             {
                 // 如果背上有蜥蜴，禁止放置蛞蝓
                 return false;
@@ -82,7 +88,7 @@ namespace LizardOnBackMod
         {
             // 检查玩家背上是否已有蜥蜴
             var lizardData = LizardOnBack.GetLizardOnBackData(self);
-            if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
+            if (!LizardOnBackMod.LizardOnBackPlugin.options.AllowCarryingSpearAndLizard.Value && lizardData.HasALizard)
             {
                 // 如果背上有蜥蜴，禁止放置长矛
                 return false;
@@ -261,33 +267,6 @@ namespace LizardOnBackMod
         }
 
 
-        private static void PlayerOnDie(On.Player.orig_Die orig, Player self)
-        {
-            if (LizardOnBack.GetLizardOnBackData(self).HasALizard)
-            {
-                LizardOnBack.GetLizardOnBackData(self).DropLizard();
-            }
-            orig(self);
-        }
-
-
-        private static void PlayerOnStun(On.Player.orig_Stun orig, Player self, int st)
-        {
-            var lizardData = LizardOnBack.GetLizardOnBackData(self);
-            int origSt = st;
-            if (self.room != null)
-            {
-                if (self.Malnourished)
-                {
-                    origSt = Mathf.RoundToInt((float)st * (self.exhausted ? 2f : 1.5f));
-                }
-                if (origSt > UnityEngine.Random.Range(40, 80) && lizardData.HasALizard && self.stunDamageType != Creature.DamageType.Blunt)
-                {
-                    lizardData.DropLizard();
-                }
-            }
-            orig(self, st);
-        }
 
 
         public static bool LikesPlayer(Lizard liz, Player player)
@@ -519,7 +498,7 @@ namespace LizardOnBackMod
                     if (!interactionLocked && lizard == null)
                     {
                         bool flag = true;
-                        if (!LizardOnBackMod.LizardOnBack.options.AllowCarryingSpearAndLizard.Value)
+                        if (!LizardOnBackMod.LizardOnBackPlugin.options.AllowCarryingSpearAndLizard.Value)
                         {
                             if (owner.spearOnBack != null)
                             {
@@ -606,7 +585,7 @@ namespace LizardOnBackMod
                     counter++;
                     //不是矛大师而且开了长按放下功能才能长按放下背上的蛞蝓猫
                     bool canPutLizardWithLongPress =
-                    LizardOnBackMod.LizardOnBack.options.EnableLongPressToDropLizard.Value
+                    LizardOnBackMod.LizardOnBackPlugin.options.EnableLongPressToDropLizard.Value
                     && owner.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear;
                     // 有蜥蜴时，长按20帧将蜥蜴拿下来
                     if (lizard != null && counter > 20 && canPutLizardWithLongPress)
@@ -860,7 +839,7 @@ namespace LizardOnBackMod
             }
             public void ThrowLizard(bool eu)
             {
-                if (lizard != null && LizardOnBackMod.LizardOnBack.options.EnableThrowLizard.Value)
+                if (lizard != null && LizardOnBackMod.LizardOnBackPlugin.options.EnableThrowLizard.Value)
                 {
                     var lizard = this.lizard;
                     LizardToHand(eu);
